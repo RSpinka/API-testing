@@ -1,0 +1,493 @@
+{
+	"info": {
+		"_postman_id": "5d063c09-28ae-40d5-b696-1050214c2fe8",
+		"name": "RESTFULL-API.DEV",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38565903"
+	},
+	"item": [
+		{
+			"name": "CRUD",
+			"item": [
+				{
+					"name": "create_new_object",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Stores the id field from response in the collection variable entryid\r",
+									"const respbdy = pm.response.json();\r",
+									"pm.collectionVariables.set(\"entryid\", respbdy.id);\r",
+									"\r",
+									"\r",
+									"// Tests\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type in header is set to 'application/json'\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"name in response is equal to the sent name \", function () {\r",
+									"    pm.expect(respbdy.name).to.eql(pm.collectionVariables.get(\"entryname\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"data object properties and values in response match the collection variable\", function () {\r",
+									"    const entrydt = JSON.parse(pm.collectionVariables.get(\"entrydata\"));\r",
+									"    pm.expect(respbdy.data.City).to.eql(entrydt.City);\r",
+									"    pm.expect(respbdy.data.Address).to.eql(entrydt.Address);\r",
+									"    pm.expect(respbdy.data.Phone).to.eql(entrydt.Phone);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 350ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(350);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Creates random full name and stores it in col.variable entryname\r",
+									"pm.collectionVariables.set(\"entryname\", \r",
+									"    pm.variables.replaceIn(\"{{$randomFullName}}\"));\r",
+									"\r",
+									"\r",
+									"// Creates random data as city, address, phone number and stores it in coll.variable entrydata\r",
+									"pm.collectionVariables.set(\"entrydata\", \"{ \\\"City\\\": \\\"\"+ pm.variables.replaceIn(\"{{$randomCity}}\") +\"\\\", \\\"Address\\\": \\\"\" + pm.variables.replaceIn(\"{{$randomStreetAddress}}\") + \"\\\", \\\"Phone\\\": \\\"\" + pm.variables.replaceIn(\"{{$randomPhoneNumber}}\") + \"\\\" }\");\r",
+									"\r",
+									"console.log(pm.collectionVariables.get(\"entryname\"));\r",
+									"console.log(pm.collectionVariables.get(\"entrydata\"));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"{{entryname}}\",\r\n   \"data\": {{entrydata}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.restful-api.dev/objects",
+							"protocol": "https",
+							"host": [
+								"api",
+								"restful-api",
+								"dev"
+							],
+							"path": [
+								"objects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_object_by_id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Changes address in coll.variable entrydata\r",
+									"const entrydt = JSON.parse(pm.collectionVariables.get(\"entrydata\"));\r",
+									"pm.collectionVariables.set(\"entrydata\", \"{ \\\"City\\\": \\\"\"+ entrydt.City +\"\\\", \\\"Address\\\": \\\"\" + pm.variables.replaceIn(\"{{$randomStreetAddress}}\") + \"\\\", \\\"Phone\\\": \\\"\" + entrydt.Phone + \"\\\" }\");\r",
+									"\r",
+									"console.log(pm.collectionVariables.get(\"entryname\"));\r",
+									"console.log(pm.collectionVariables.get(\"entrydata\"));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Tests\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type in header is set to 'application/json'\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"const respbdy = pm.response.json();\r",
+									"\r",
+									"pm.test(\"name in response is equal to the sent name \", function () {\r",
+									"    pm.expect(respbdy.name).to.eql(pm.collectionVariables.get(\"entryname\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"data object properties and values in response match the collection variable\", function () {\r",
+									"    const entrydt = JSON.parse(pm.collectionVariables.get(\"entrydata\"));\r",
+									"    pm.expect(respbdy.data.City).to.eql(entrydt.City);\r",
+									"    pm.expect(respbdy.data.Address).to.eql(entrydt.Address);\r",
+									"    pm.expect(respbdy.data.Phone).to.eql(entrydt.Phone);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 350ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(350);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"{{entryname}}\",\r\n   \"data\": {{entrydata}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.restful-api.dev/objects/{{entryid}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"restful-api",
+								"dev"
+							],
+							"path": [
+								"objects",
+								"{{entryid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "part_update_object_by_id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Changes phone nr in coll.variable entrydata\r",
+									"const entrydt = JSON.parse(pm.collectionVariables.get(\"entrydata\"));\r",
+									"pm.collectionVariables.set(\"entrydata\", \"{ \\\"City\\\": \\\"\"+ entrydt.City +\"\\\", \\\"Address\\\": \\\"\" + entrydt.Address + \"\\\", \\\"Phone\\\": \\\"\" + pm.variables.replaceIn(\"{{$randomPhoneNumber}}\") + \"\\\" }\");\r",
+									"\r",
+									"console.log(pm.collectionVariables.get(\"entryname\"));\r",
+									"console.log(pm.collectionVariables.get(\"entrydata\"));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Tests\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type in header is set to 'application/json'\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"data object properties and values in response match the collection variable\", function () {\r",
+									"    const entrydt = JSON.parse(pm.collectionVariables.get(\"entrydata\"));\r",
+									"    const respbdy = pm.response.json();\r",
+									"    pm.expect(respbdy.data.City).to.eql(entrydt.City);\r",
+									"    pm.expect(respbdy.data.Address).to.eql(entrydt.Address);\r",
+									"    pm.expect(respbdy.data.Phone).to.eql(entrydt.Phone);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 350ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(350);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"data\": {{entrydata}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.restful-api.dev/objects/{{entryid}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"restful-api",
+								"dev"
+							],
+							"path": [
+								"objects",
+								"{{entryid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_object_by_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Tests\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type in header is set to 'application/json'\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"const respbdy = pm.response.json();\r",
+									"\r",
+									"pm.test(\"name in response is equal to the sent name \", function () {\r",
+									"    pm.expect(respbdy.name).to.eql(pm.collectionVariables.get(\"entryname\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"data object properties and values in response match the collection variable\", function () {\r",
+									"    const entrydt = JSON.parse(pm.collectionVariables.get(\"entrydata\"));\r",
+									"    pm.expect(respbdy.data.City).to.eql(entrydt.City);\r",
+									"    pm.expect(respbdy.data.Address).to.eql(entrydt.Address);\r",
+									"    pm.expect(respbdy.data.Phone).to.eql(entrydt.Phone);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 350ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(350);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.restful-api.dev/objects/{{entryid}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"restful-api",
+								"dev"
+							],
+							"path": [
+								"objects",
+								"{{entryid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_object_by_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Tests\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required field 'message'\", function () {\r",
+									"    const respData = pm.response.json();\r",
+									"    pm.expect(respData).to.have.property('message');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Message field contains exact text\", function () {\r",
+									"    var tibi = pm.collectionVariables.get(\"entryid\")\r",
+									"    const respData = pm.response.json();\r",
+									"    pm.expect(respData.message).to.equal(\"Object with id = \"+tibi+\" has been deleted.\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 350ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(350);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://api.restful-api.dev/objects/{{entryid}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"restful-api",
+								"dev"
+							],
+							"path": [
+								"objects",
+								"{{entryid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "head_object_by_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Tests\r",
+									"pm.test(\"Response status code is 404\", function () {\r",
+									"  pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 350ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(350);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "HEAD",
+						"header": [],
+						"url": {
+							"raw": "https://api.restful-api.dev/objects/{{entryid}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"restful-api",
+								"dev"
+							],
+							"path": [
+								"objects",
+								"{{entryid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "entryid",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "entryname",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "entrydata",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
