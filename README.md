@@ -3,7 +3,7 @@
 
 - **API:** [RESTFUL-API](https://restful-api.dev/)
 - **Allowed Methods:** `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`, `HEAD`
-- **Accepted Objects:** `"name"`, `"data"` (with free values)
+- **Accepted Objects:** predefined objets `"name"`, `"data"` with free values
 - **Base URL:** `https://api.restful-api.dev/`
 - **Endpoint:** `/objects`
 
