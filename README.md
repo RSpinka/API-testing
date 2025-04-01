@@ -1,121 +1,132 @@
 # API testing 
 ## Presentation of my API testing project (CRUD on free API with Tests) in Postman
 
-- **API:** [RESTFUL-API](https://restful-api.dev/)
+- **API:** RESTFUL-API [https://restful-api.dev](https://restful-api.dev/)
 - **Allowed Methods:** `GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`, `HEAD`
 - **Accepted Objects:** predefined objets `"name"`, `"data"` with free values
 - **Base URL:** `https://api.restful-api.dev/`
 - **Endpoint:** `/objects`
 
-## 📁 Collection Overview
+## Collection Overview and Setting Up Variables
 
-Postman collection contains CRUD requests grouped in a single folder.
+- Postman collection contains CRUD requests grouped in a single folder.
+- Variables are created at the collection level to store request (and response) data.
 
-![Collection View](screenshots/collection_view.png)
+![Collection View](screenshots/PM01.png)
+
 
 ---
 
-## 🛠️ Setting Up Variables
+## Creating a New Record (POST Request)
 
-- Variables are created at the collection level to store request data.
 - Record data is prepared with random values (`name`, `city`, `address`, `phone`) in **Pre-request Scripts**.
 
-![Variables Setup](screenshots/variables_setup.png)
-
----
-
-## 📌 Creating a New Record (POST Request)
-
+![Pre-req Scripts](screenshots/PM02.png)
+ 
 - Sends a `POST` request with JSON data.
-- Stores the `record id` from the response in a collection variable.
-- Tests response for:
-  - HTTP status code
-  - Header `content-type`
-  - Matching `name` & `data`
-  - Response time
+ 
+![POST Request](screenshots/PM03.png)
 
-![POST Request](screenshots/post_request.png)
+- Stores the record `id` from the response in a collection variable.
+- Tests response for HTTP status code, header `content-type`, matching `name` & `data`, response time
+
+![POST Request](screenshots/PM04.png)
 
 ---
 
-## 🔄 Updating a Record (PUT Request)
+## Updating a Record (PUT Request)
 
 - Modifies the record with a new `address`.
 - Stores updated data in a collection variable.
-- Tests response for correctness.
 
-![PUT Request](screenshots/put_request.png)
+![PUT Request](screenshots/PM05.png)
 
----
 
-## 🔄 Partial Update (PATCH Request)
+- Sends `PUT` request with JSON data.
 
-- Updates only the `data` object (e.g., changes `phone` number).
-- Stores updated data in a collection variable.
-- Tests response for correctness.
+![PUT Request](screenshots/PM06.png)
 
-![PATCH Request](screenshots/patch_request.png)
+- Tests response (HTTP status code, header `content-type`, matching `name` & `data`, response time).
+
+![PUT Request](screenshots/PM07.png)
 
 ---
 
-## 🔍 Retrieving the Record (GET Request)
+## Partial Update (PATCH Request)
+
+- Changes `phone` number and stores updated data in a collection variable.
+
+![PATCH Request](screenshots/PM08.png)
+
+- Updates only the `data` object.
+
+![PATCH Request](screenshots/PM09.png)
+
+- Tests response (HTTP status code, header `content-type`, matching `data`, response time).
+
+![PATCH Request](screenshots/PM10.png)
+
+---
+
+## Retrieving the Record (GET Request)
 
 - Fetches the record to verify updates.
-- Tests response for correctness.
 
-![GET Request](screenshots/get_request.png)
+![GET Request](screenshots/PM11.png)
+
+- Tests response (HTTP status code, header `content-type`, matching `name` & `data`, response time).
+
+![GET Request](screenshots/PM12.png)
 
 ---
 
-## ❌ Deleting a Record (DELETE Request)
+## Deleting a Record (DELETE Request)
 
 - Deletes the created record.
-- Tests response for:
-  - HTTP status code
-  - Expected message
-  - Response time
 
-![DELETE Request](screenshots/delete_request.png)
+![DELETE Request](screenshots/PM13.png)
+
+- Tests response for HTTP status code, expected message, response time
+
+![DELETE Request](screenshots/PM14.png)
 
 ---
 
-## ✅ Verifying Deletion (HEAD Request)
+## Verifying Deletion (HEAD Request)
 
 - Ensures the record no longer exists using a `HEAD` request.
 
-![HEAD Request](screenshots/head_request.png)
+![HEAD Request](screenshots/PM15.png)
 
 ---
 
-## 🏁 Running the Full Collection
+## Console log
+
+![Console Log](screenshots/PM16.png)
+
+## Running the Full Collection in Postman Runner
 
 - Executes the entire test collection to validate CRUD operations.
 
-![Collection Run](screenshots/collection_run.png)
+![Collection Run](screenshots/PM17.png)
+![Collection Run](screenshots/PM18.png)
 
 ---
 
 ## 📂 Project Structure
 ```plaintext
 /
-├── Postman_Collection.json  # Exported Postman collection
-├── README.md                # Project documentation (this file)
-├── screenshots/             # Folder containing all screenshots
-│   ├── collection_view.png
-│   ├── variables_setup.png
-│   ├── post_request.png
-│   ├── put_request.png
-│   ├── patch_request.png
-│   ├── get_request.png
-│   ├── delete_request.png
-│   ├── head_request.png
-│   ├── collection_run.png
+├── RESTFULL-API.DEV.postman_collection.json  # Exported Postman collection
+├── README.md                                 # Project documentation (this file)
+├── screenshots/                              # Folder containing all screenshots
+├── docs/                                     # Folder containing project documentation in pdf 
+│   ├── Project_Postman.pdf
 ```
 
 ---
 
-## 📌 How to Use This Project
-1. **Import the Collection**: Open Postman and import `Postman_Collection.json`.
+## How to Use This Project
+1. **Import the Collection**: Open Postman and import `RESTFULL-API.DEV.postman_collection.json`.
 2. **Run the Tests**: Execute the collection to validate CRUD operations.
 3. **Check the Results**: Review test results and API responses.
 
