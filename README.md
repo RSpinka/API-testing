@@ -6,6 +6,7 @@
 - **Accepted Objects:** predefined objets `"name"`, `"data"` with free values
 - **Base URL:** `https://api.restful-api.dev/`
 - **Endpoint:** `/objects`
+- [Postman export file in JSON](RESTFULL-API.DEV.postman_collection.json)
 
 ## Collection Overview and Setting Up Variables
 
